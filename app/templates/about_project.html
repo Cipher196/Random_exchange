@@ -1,0 +1,32 @@
+{%extends 'base.html'%}
+
+{% block title%}
+About Project
+{% endblock %}
+
+
+{%block body%}
+
+{% include 'components/visitor_navbar.html' %}
+
+<div class="container justify-content-center col-lg-8">
+
+<div class="card text-center">
+  <div class="card-header">
+    About Project
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Random Exchange</h5>
+    <p class="card-text">
+
+    This project is a Stack Exchange–style web application built using HTML, CSS, JavaScript, Flask, and SQLite. The platform allows users to ask questions, post answers, and interact through a simple voting system. The main goal of the project is to create a clean and lightweight MVP that focuses on core community discussion features without unnecessary complexity. Flask handles the backend logic and routing, while SQLite is used for efficient database management. The project also follows a structured folder architecture and version control using Git. It is designed to help users learn full-stack development concepts such as authentication, database design, CRUD operations, and web application deployment.
+
+
+    </p>
+    <a href="/" class="btn btn-primary">Go Back</a>
+  </div>
+</div>
+
+</div>
+
+{%endblock%}
