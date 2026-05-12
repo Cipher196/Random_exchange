@@ -10,6 +10,10 @@ Register
 
 {% include 'components/visitor_navbar.html' %}
 
+{% include 'components/messages.html' %}
+
+
+
 <div class="container justify-content-center col-lg-6">
 <form method="POST">
   {{form.hidden_tag()}}
@@ -17,6 +21,7 @@ Register
   <div class="mb-3">
     {{form.username.label(class="form-label")}}
     {{form.username(class="form-control")}}
+
   </div>
   <div class="mb-3">
     {{form.email.label(class="form-label")}}
@@ -32,7 +37,8 @@ Register
   </div>
 
 <!--   <button type="submit" class="btn btn-primary">Submit</button> -->
-  {{form.submit(class="btn btn-primary")}}
+<!--   {{form.submit(class="btn btn-primary")}} -->
+<button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
 
