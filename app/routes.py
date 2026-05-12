@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
-from app.forms import RegistrationForm
+from app.forms import RegistrationForm, LoginForm
 
 main = Blueprint("main", __name__)
 
@@ -15,17 +15,22 @@ def about_project():
 def register():
     form=RegistrationForm()
     if form.validate_on_submit():
-        print("validation success")
+        print("validation successfull")
         flash('Thank for registration!')
         return redirect(url_for('main.login'))
+    else:
+        print(form.errors)
     return render_template('register.html', form=form)
 
 
 @main.route('/login', methods=['GET','POST'])
 def login():
     form=LoginForm()
-    if request.method=='POST' and form.validate():
+    if form.validate_on_submit():
+        print("validation successfull")
         flash('Thank for Login!')
-        return redirect(url_for(main.about_project))
+        return redirect(url_for('main.home'))
+    else:
+        print(form.errors)
     return render_template('login.html', form=form)
 
