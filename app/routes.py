@@ -15,11 +15,13 @@ def about_project():
 def register():
     form=RegistrationForm()
     if form.validate_on_submit():
-        print("validation successfull")
-        flash('Thank for registration!')
+        # print("validation successfull")
+        flash('Thank for registration!', 'success')
         return redirect(url_for('main.login'))
     else:
-        print(form.errors)
+        if request.method=='POST':
+            print(form.errors)
+            flash('Registration unsuccessfull', 'danger')
     return render_template('register.html', form=form)
 
 
@@ -27,10 +29,12 @@ def register():
 def login():
     form=LoginForm()
     if form.validate_on_submit():
-        print("validation successfull")
-        flash('Thank for Login!')
+        # print("validation successfull")
+        flash('Thank for Login!','success')
         return redirect(url_for('main.home'))
     else:
-        print(form.errors)
+        if request.method=='POST':
+            print(form.errors)
+            flash('Login unsuccessfull', 'danger')
     return render_template('login.html', form=form)
 

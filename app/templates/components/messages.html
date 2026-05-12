@@ -1,0 +1,13 @@
+<div class="container justify-content-center col-lg-6">
+
+    {%with messages=get_flashed_messages(with_categories=true)%}
+    {%if messages%}
+        {%for categories, message in messages%}
+        <div class="alert alert-{{categories}}">
+            {{message}}
+        </div>
+        {%endfor%}
+    {%endif%}
+    {%endwith%}
+
+</div>
