@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from app.forms import RegistrationForm, LoginForm
+from app import bcrypt, db
+from app.models import User
 
 main = Blueprint("main", __name__)
 
@@ -15,7 +17,10 @@ def about_project():
 def register():
     form=RegistrationForm()
     if form.validate_on_submit():
-        # print("validation successfull")
+        pw_hash=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user=User(username=form.username.data, password=pw_hash, email=form.email.data)
+        db.session.add(user)
+        db.session.commit()
         flash('Thank for registration!', 'success')
         return redirect(url_for('main.login'))
     else:
