@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, flash, url_for
 from app.forms import RegistrationForm, LoginForm
 from app import bcrypt, db
 from app.models import User
+from flask_login import login_user, current_user
 
 main = Blueprint("main", __name__)
 
@@ -15,6 +16,10 @@ def about_project():
 
 @main.route('/register', methods=['GET','POST'])
 def register():
+    if current_user.is_authenticated:
+        flash('You are already logged in', 'success')
+        return redirect(url_for('main.home'))
+
     form=RegistrationForm()
     if form.validate_on_submit():
         pw_hash=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -32,11 +37,20 @@ def register():
 
 @main.route('/login', methods=['GET','POST'])
 def login():
+    if current_user.is_authenticated:
+        flash('You are already logged in', 'success')
+        return redirect(url_for('main.home'))
+
     form=LoginForm()
     if form.validate_on_submit():
-        # print("validation successfull")
-        flash('Thank for Login!','success')
-        return redirect(url_for('main.home'))
+        user=User.query.filter_by(username=form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            flash('Thank for Login!','success')
+            return redirect(url_for('main.home'))
+        else:
+            flash('Data incorrect!!', 'danger')
+
     else:
         if request.method=='POST':
             print(form.errors)
