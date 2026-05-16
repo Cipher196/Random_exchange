@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, flash, url_for
 from app.forms import RegistrationForm, LoginForm
 from app import bcrypt, db
 from app.models import User
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 
 main = Blueprint("main", __name__)
 
@@ -57,3 +57,9 @@ def login():
             flash('Login unsuccessfull', 'danger')
     return render_template('login.html', form=form)
 
+
+@main.route('/logout')
+def logout():
+    logout_user()
+    flash('Successful logout', 'success')
+    return redirect(url_for('main.home'))
