@@ -1,12 +1,48 @@
 {%extends 'base.html'%}
 
 {%block title%}
-
+Ask
 {%endblock%}
 
 
 
 {%block body%}
 
+{% include 'components/navbar.html' %}
+
+{% include 'components/messages.html' %}
+
+
+
+<div class="container justify-content-center col-lg-6">
+
+    <div class="card text-center">
+        <div class="card-header">
+            Ask a question
+        </div>
+        <form method="POST">
+            {{form.hidden_tag()}}
+
+            <div class="card-body">
+
+                <div class="mb-3">
+       <!--             <label for="quesion-title" class="form-label">Question Title</label>
+                    <input type="text" class="form-control" id="quesion-title" >-->
+                    {{form.title.label(class="form-label")}}
+                    {{form.title(class="form-control")}}
+                </div>
+                <div class="mb-3">
+                <!--    <label for="question" class="form-label">Provide detailed quesion</label>
+                    <textarea class="form-control" id="question" rows="4"></textarea>-->
+                    {{form.question.label(class="form-label")}}
+                    {{form.question(class="form-control", rows="4")}}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+</div>
 
 {%endblock%}

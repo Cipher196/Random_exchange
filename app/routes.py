@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
-from app.forms import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm, QuestionForm
 from app import bcrypt, db
-from app.models import User
-from flask_login import login_user, current_user, logout_user
+from app.models import User, Question
+from flask_login import login_user, current_user, logout_user, login_required
 
 main = Blueprint("main", __name__)
 
@@ -21,9 +21,10 @@ def register():
         return redirect(url_for('main.home'))
 
     form=RegistrationForm()
+
     if form.validate_on_submit():
         pw_hash=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user=User(username=form.username.data, password=pw_hash, email=form.email.data)
+        user=User(username=form.username.data, password=pw_hash, email=form.email.data.lower())
         db.session.add(user)
         db.session.commit()
         flash('Thank for registration!', 'success')
@@ -46,7 +47,7 @@ def login():
         user=User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            flash('Thank for Login!','success')
+            flash('Logged in successfully!','success')
             return redirect(url_for('main.home'))
         else:
             flash('Data incorrect!!', 'danger')
@@ -54,7 +55,7 @@ def login():
     else:
         if request.method=='POST':
             print(form.errors)
-            flash('Login unsuccessfull', 'danger')
+            flash('Login unsuccessful', 'danger')
     return render_template('login.html', form=form)
 
 
@@ -63,3 +64,21 @@ def logout():
     logout_user()
     flash('Successful logout', 'success')
     return redirect(url_for('main.home'))
+
+
+@main.route('/ask', methods=['GET','POST'])
+@login_required
+def ask():
+
+    form=QuestionForm()
+    if form.validate_on_submit():
+        question=Question(title=form.title.data, question=form.question.data, author=current_user)
+        db.session.add(question)
+        db.session.commit()
+        flash('Question Submitted Successfully', 'success')
+        return redirect(url_for('main.home'))
+    else:
+        if request.method=='POST':
+            print(form.errors)
+            flash('Title length should be between 3-30 and detail should be provided', 'danger')
+    return render_template('ask.html', form=form)
