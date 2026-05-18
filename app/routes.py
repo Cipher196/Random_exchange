@@ -3,12 +3,14 @@ from app.forms import RegistrationForm, LoginForm, QuestionForm
 from app import bcrypt, db
 from app.models import User, Question
 from flask_login import login_user, current_user, logout_user, login_required
+from datetime import datetime
 
 main = Blueprint("main", __name__)
 
 @main.route('/')
 def home():
-    return render_template("index.html")
+    data=Question.query.order_by(Question.created_at.desc()).all()
+    return render_template("index.html", data=data, now=datetime.utcnow())
 
 @main.route('/about_project')
 def about_project():
@@ -82,3 +84,10 @@ def ask():
             print(form.errors)
             flash('Title length should be between 3-30 and detail should be provided', 'danger')
     return render_template('ask.html', form=form)
+
+
+
+@main.route('/question/<int:id>')
+def question(id):
+    data=Question.query.filter_by(id=id).first()
+    return render_template('question.html', question=data)

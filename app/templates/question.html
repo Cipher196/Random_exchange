@@ -1,12 +1,17 @@
 {%extends 'base.html'%}
 
 {%block title%}
-
+question - {{question.id}}
 {%endblock%}
 
 
 
 {%block body%}
+
+{% include 'components/navbar.html' %}
+
+{% include 'components/messages.html' %}
+
 
 
 {%endblock%}
