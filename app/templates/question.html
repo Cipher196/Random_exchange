@@ -10,7 +10,54 @@ question - {{question.id}}
 
 {% include 'components/navbar.html' %}
 
-{% include 'components/messages.html' %}
+<div class="container justify-content-center col-lg-8">
+
+    <div class="card" style="background-color: #f5feff;">
+        <div class="card-body">
+            <h4 class="card-title">{{question.title}}</h4>
+            <p class="card-text">{{question.question}}</p>
+            <div class="d-flex justify-content-between">
+                <a href="{{url_for('main.home')}}" class="btn btn-primary btn-sm">Go Back</a>
+                <a href="#" class="btn btn-primary btn-sm">Answer</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- ------------this is answer section------------------------ -->
+
+<div class="container justify-content-center col-lg-8">
+
+    <div class="list-group">
+
+    {% if data %}
+        {% for question in data%}
+        <a href="{{url_for('main.question', id=question.id )}}" class="list-group-item list-group-item-action" aria-current="true">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{question.title}}</h5>
+            <small>{{ (now - question.created_at).days }} days ago</small>
+        </div>
+        <p class="mb-1">{{ question.question | truncate(20) }}</p>
+        <small>vote: 0</small>
+        </a>
+        {% endfor %}
+    {% else %}
+    <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+        <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">No Answer given for this question</h5>
+        <small>3 days ago</small>
+        </div>
+        <p class="mb-1">If You want to answer. First Login</p>
+        <small>vote: 0 </small>
+    </a>
+    {% endif %}
+
+    </div>
+
+</div>
 
 
 

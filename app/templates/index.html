@@ -22,23 +22,23 @@ Random_exchange
 
   {% if data %}
     {% for question in data%}
-    <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+    <a href="{{url_for('main.question', id=question.id )}}" class="list-group-item list-group-item-action" aria-current="true">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{question.title}}</h5>
         <small>{{ (now - question.created_at).days }} days ago</small>
       </div>
       <p class="mb-1">{{ question.question | truncate(20) }}</p>
-      <small>I will add vote functionality here but later</small>
+      <small>vote: 0</small>
     </a>
     {% endfor %}
   {% else %}
   <a href="#" class="list-group-item list-group-item-action" aria-current="true">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
+      <h5 class="mb-1">No Question Asked</h5>
       <small>3 days ago</small>
     </div>
-    <p class="mb-1">Some placeholder content in a paragraph.</p>
-    <small>And some small print.</small>
+    <p class="mb-1">Please Ask one</p>
+    <small>You need to login to ask question</small>
   </a>
   {% endif %}
 
