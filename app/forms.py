@@ -33,3 +33,9 @@ class QuestionForm(FlaskForm):
     question=TextAreaField('Question', validators=[DataRequired()])
     submit=SubmitField('Submit')
 
+
+class AnswerForm(FlaskForm):
+    # title=StringField('Question Title', validators=[DataRequired(), Length(min=3, max=30)])
+    answer=TextAreaField('Answer', validators=[DataRequired()])
+    submit=SubmitField('Submit')
+

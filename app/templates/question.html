@@ -14,11 +14,18 @@ question - {{question.id}}
 
     <div class="card" style="background-color: #f5feff;">
         <div class="card-body">
+
+        <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">By:  {{question.author.username}}</h6>
+            <small>{{ (now - question.created_at).days }} days ago</small>
+        </div>
+
             <h4 class="card-title">{{question.title}}</h4>
             <p class="card-text">{{question.question}}</p>
             <div class="d-flex justify-content-between">
                 <a href="{{url_for('main.home')}}" class="btn btn-primary btn-sm">Go Back</a>
-                <a href="#" class="btn btn-primary btn-sm">Answer</a>
+                <a href="#" class="btn btn-primary btn-sm">   Vote   </a>
+                <a href="{{url_for('main.answer', question_id=question.id)}}" class="btn btn-primary btn-sm">Answer</a>
             </div>
         </div>
     </div>
@@ -33,15 +40,17 @@ question - {{question.id}}
 
     <div class="list-group">
 
-    {% if data %}
-        {% for question in data%}
-        <a href="{{url_for('main.question', id=question.id )}}" class="list-group-item list-group-item-action" aria-current="true">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{question.title}}</h5>
-            <small>{{ (now - question.created_at).days }} days ago</small>
-        </div>
-        <p class="mb-1">{{ question.question | truncate(20) }}</p>
-        <small>vote: 0</small>
+    {% if answers %}
+        {% for answer in answers%}
+        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">By:  {{answer.author.username}}</h6>
+                <small>{{ (now - answer.created_at).days }} days ago</small>
+            </div>
+            <div>
+                <p class="mb-1">{{ answer.answer }}</p>
+                <small>vote: 0</small>
+            </div>
         </a>
         {% endfor %}
     {% else %}
