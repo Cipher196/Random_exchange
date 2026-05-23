@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from app.forms import RegistrationForm, LoginForm, QuestionForm, AnswerForm
 from app import bcrypt, db
-from app.models import User, Question, Answer
+from app.models import User, Question, Answer, QuestionVote, AnswerVote
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -115,6 +115,32 @@ def answer(question_id):
 
 
 
+@main.route('/question/<int:id>/vote')
+@login_required
+def question_vote(id):
+    vote=QuestionVote.query.filter_by(user_id=current_user.get_id(), question_id=id).first()
 
+    if vote:
+        db.session.delete(vote)
+    else:
+        new_vote=QuestionVote(user_id=current_user.get_id(), question_id=id)
+        db.session.add(new_vote)
+
+    db.session.commit()
+    return redirect(url_for('main.question', id=id))
+
+@main.route('/answer/<int:id>/vote')
+@login_required
+def answer_vote(id):
+    answer=Answer.query.get_or_404(id)
+    vote=AnswerVote.query.filter_by(user_id=current_user.get_id(), answer_id=id).first()
+    if vote:
+        db.session.delete(vote)
+    else:
+        new_vote=AnswerVote(user_id=current_user.get_id(), answer_id=id)
+        db.session.add(new_vote)
+
+    db.session.commit()
+    return redirect(url_for('main.question', id=answer.question_id))
 
 

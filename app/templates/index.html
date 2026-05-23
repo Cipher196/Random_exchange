@@ -28,7 +28,7 @@ Random_exchange
         <small>{{ (now - question.created_at).days }} days ago</small>
       </div>
       <p class="mb-1">{{ question.question | truncate(20) }}</p>
-      <small>vote: 0</small>
+      <small>votes: {{question.votes|length}}</small>
     </a>
     {% endfor %}
   {% else %}

@@ -2,6 +2,7 @@ from app import db
 from flask_login import UserMixin
 from app import login_manager
 from datetime import datetime
+from sqlalchemy import PrimaryKeyConstraint
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -12,8 +13,13 @@ class User(db.Model, UserMixin):
     username=db.Column(db.String(20), unique=True, nullable=False)
     email=db.Column(db.String(50), unique=True, nullable=False)
     password=db.Column(db.String(200), nullable=False)
+
     questions=db.relationship('Question', backref='author', lazy=True)
     answers=db.relationship('Answer', backref='author', lazy=True)
+
+    question_vote=db.relationship('QuestionVote', backref='voter', lazy=True)
+    answer_vote=db.relationship('AnswerVote', backref='voter', lazy=True)
+
 
     def __repr__(self):
         return f"User('{self.username}','{self.email}')"
@@ -26,6 +32,8 @@ class Question(db.Model):
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    votes=db.relationship('QuestionVote', backref='question', lazy=True)
+
 
 class Answer(db.Model):
     id=db.Column(db.Integer, primary_key=True)
@@ -35,6 +43,25 @@ class Answer(db.Model):
     question_id=db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
     created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    votes=db.relationship('AnswerVote', backref='answer', lazy=True)
 
 
+
+class QuestionVote(db.Model):
+
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    question_id=db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+
+    __table_args__=(
+        PrimaryKeyConstraint('user_id','question_id'),
+    )
+
+
+class AnswerVote(db.Model):
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    answer_id=db.Column(db.Integer, db.ForeignKey('answer.id'), nullable=False)
+
+    __table_args__=(
+        PrimaryKeyConstraint('user_id','answer_id'),
+    )
 

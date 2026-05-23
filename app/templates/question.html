@@ -17,14 +17,16 @@ question - {{question.id}}
 
         <div class="d-flex w-100 justify-content-between">
             <h6 class="mb-1">By:  {{question.author.username}}</h6>
+            <small>votes: {{question.votes|length}}</small>
             <small>{{ (now - question.created_at).days }} days ago</small>
         </div>
-
+            <br>
             <h4 class="card-title">{{question.title}}</h4>
             <p class="card-text">{{question.question}}</p>
+            <br>
             <div class="d-flex justify-content-between">
                 <a href="{{url_for('main.home')}}" class="btn btn-primary btn-sm">Go Back</a>
-                <a href="#" class="btn btn-primary btn-sm">   Vote   </a>
+                <a href="{{url_for('main.question_vote', id=question.id)}}" class="btn btn-primary btn-sm">   Vote   </a>
                 <a href="{{url_for('main.answer', question_id=question.id)}}" class="btn btn-primary btn-sm">Answer</a>
             </div>
         </div>
@@ -42,14 +44,14 @@ question - {{question.id}}
 
     {% if answers %}
         {% for answer in answers%}
-        <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+        <a href="{{url_for('main.answer_vote', id=answer.id)}}" class="list-group-item list-group-item-action" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
                 <h6 class="mb-1">By:  {{answer.author.username}}</h6>
                 <small>{{ (now - answer.created_at).days }} days ago</small>
             </div>
             <div>
                 <p class="mb-1">{{ answer.answer }}</p>
-                <small>vote: 0</small>
+                <small>votes: {{answer.votes|length}}</small>
             </div>
         </a>
         {% endfor %}
