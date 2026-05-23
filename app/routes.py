@@ -9,7 +9,7 @@ main = Blueprint("main", __name__)
 
 @main.route('/')
 def home():
-    data=Question.query.order_by(Question.created_at.desc()).all()
+    data=db.paginate(db.select(Question).order_by(Question.created_at.desc()), per_page=4)
     return render_template("index.html", data=data, now=datetime.utcnow())
 
 @main.route('/about_project')
@@ -90,7 +90,9 @@ def ask():
 @main.route('/question/<int:id>')
 def question(id):
     question_data=Question.query.filter_by(id=id).first()
-    answer_data=Answer.query.filter_by(question_id=id).order_by(Answer.created_at.desc()).all()
+
+    answer_data=db.paginate(db.select(Answer).where(Answer.question_id==id).order_by(Answer.created_at.desc()), per_page=3)
+    # answer_data=Answer.query.filter_by(question_id=id).order_by(Answer.created_at.desc()).all()
     return render_template('question.html', question=question_data, answers=answer_data, now=datetime.utcnow())
 
 

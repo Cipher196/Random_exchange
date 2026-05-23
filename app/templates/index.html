@@ -18,33 +18,55 @@ Random_exchange
 <!-- -------------this is question section ------------------- -->
 <div class="container justify-content-center col-lg-8">
 
-<div class="list-group">
+  <div class="list-group">
 
-  {% if data %}
-    {% for question in data%}
-    <a href="{{url_for('main.question', id=question.id )}}" class="list-group-item list-group-item-action" aria-current="true">
+    {% if data %}
+      {% for question in data%}
+      <a href="{{url_for('main.question', id=question.id )}}" class="list-group-item list-group-item-action" aria-current="true">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{question.title}}</h5>
+          <small>{{ (now - question.created_at).days }} days ago</small>
+        </div>
+        <p class="mb-1">{{ question.question | truncate(20) }}</p>
+        <small>votes: {{question.votes|length}}</small>
+      </a>
+      {% endfor %}
+    {% else %}
+    <a href="#" class="list-group-item list-group-item-action" aria-current="true">
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{question.title}}</h5>
-        <small>{{ (now - question.created_at).days }} days ago</small>
+        <h5 class="mb-1">No Question Asked</h5>
+        <small>3 days ago</small>
       </div>
-      <p class="mb-1">{{ question.question | truncate(20) }}</p>
-      <small>votes: {{question.votes|length}}</small>
+      <p class="mb-1">Please Ask one</p>
+      <small>You need to login to ask question</small>
     </a>
-    {% endfor %}
-  {% else %}
-  <a href="#" class="list-group-item list-group-item-action" aria-current="true">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">No Question Asked</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Please Ask one</p>
-    <small>You need to login to ask question</small>
-  </a>
-  {% endif %}
+    {% endif %}
+
+  </div>
+
+<!-- --------------Page Selection Widget------------------------ -->
+
+
+
+  <nav class="pt-2" aria-label="Page navigation example">
+    <ul class="pagination">
+      {% for page in data.iter_pages(left_edge=1, left_current=1, right_current=1, right_edge=1) %}
+        {% if page %}
+          {% if page == data.page %}
+            <li class="page-item active"><a class="page-link" href="{{url_for('main.home', page=page)}}">{{page}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="{{url_for('main.home', page=page)}}">{{page}}</a></li>
+          {% endif %}
+        {% else %}
+          <li class="page-item"><a class="page-link" href="#">...</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+
 
 </div>
 
-</div>
 
 </div>
 
